@@ -2,7 +2,7 @@ import midi
 from MidiTools import create_chord_progression
 from MidiTools import get_notes_per_step
 from MidiTools import create_track_from_notes
-from Listener_offline import Environment
+from Listener import Environment
 import csv
 import random
 import sys
@@ -16,7 +16,7 @@ INIT_NOTE = 0
 # 1. Regular MeRLA melody
 # 2. MeRLA melody with no tension reward
 # 3. Melody with random policy
-SURVEY = False;
+SURVEY = True
 
 # returns the best (greedy with respect to Q) action for given state
 # note: if there are multiple "best" actions, will return random choice of best actions
@@ -222,7 +222,7 @@ for i in range(len(chord_progressions)):
     env = Environment(chord_steps, key, scale)
 
     # get action-value tables through q-learning
-    action_value = run_experiment(env, 5, 'results_chord_prog%d.csv'%i, 2000, 0.9)
+    action_value = run_experiment(env, 1, 'results_chord_prog%d.csv'%i, 1000, 0.9)
 
     # create melody tracks using learned action-value tables
     melody_steps = make_melody(env, action_value)
@@ -241,7 +241,7 @@ for i in range(len(chord_progressions)):
         # create seperate environment with no tension reinforcement and generate melody
         env_no_tension = Environment(chord_steps, key, scale)
         env_no_tension.set_weights(2, 0.5, 0, 1, 0.5)
-        action_value_no_tension = run_experiment(env, 1, 'results_chord_prog%d_no_tension_2.csv' % i, 2000, 0.9)
+        action_value_no_tension = run_experiment(env_no_tension, 1, 'results_chord_prog%d_no_tension_2.csv' % i, 1000, 0.9)
         melody_steps_no_tension = make_melody(env_no_tension, action_value_no_tension)
         melody_no_tension = create_track_from_notes(melody_steps_no_tension, RES)
 
