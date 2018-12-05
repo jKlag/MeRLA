@@ -12,3 +12,6 @@ The main.py script can then be run with
 ```sh
 python2.7 main.py
 ```
+
+
+Copyright © 2018 Joshua Klag
